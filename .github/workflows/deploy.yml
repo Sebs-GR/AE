@@ -34,8 +34,8 @@ jobs:
 
       - name: Build and push vue-symptom-app
         run: |
-          docker build --build-arg VITE_PATIENTS_SERVICE_URL=https://patients.example.com \
-                       --build-arg VITE_SYMPTOMS_SERVICE_URL=https://symptoms.example.com \
+          docker build --build-arg VITE_PATIENTS_SERVICE_URL=https://paciente-api-auc0edhjbtedb2gk.canadacentral-01.azurewebsites.net/api \
+                       --build-arg VITE_SYMPTOMS_SERVICE_URL=https://sintomas-api-dgapcwd5b2e6c7dj.canadacentral-01.azurewebsites.net/api \
                        -t $REGISTRY/vue-symptom-app ./client/vue-symptom-app
           docker push $REGISTRY/vue-symptom-app
 
@@ -49,14 +49,14 @@ jobs:
           az webapp config appsettings set \
             --name ${{ secrets.AZURE_WEBAPP_NAME_PATIENTS }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --settings MONGO_URI='${{ secrets.MONGO_URI }}'
+            --settings MONGO_URI=${{ secrets.MONGO_URI }}
 
       - name: Set MONGO_URI for symptoms-service
         run: |
           az webapp config appsettings set \
             --name ${{ secrets.AZURE_WEBAPP_NAME_SYMPTOMS }} \
             --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
-            --settings MONGO_URI='${{ secrets.MONGO_URI }}'
+            --settings MONGO_URI=${{ secrets.MONGO_URI }}
 
       - name: Deploy to Azure Web App (patients-service)
         uses: azure/webapps-deploy@v2
