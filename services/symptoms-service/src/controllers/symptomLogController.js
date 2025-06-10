@@ -1,10 +1,23 @@
 // symptom-tracker-monorepo/services/symptoms-service/src/controllers/symptomLogController.js
 import SymptomLog from '../models/SymptomLog.js';
 
+// Optional: you might want to verify patient existence by calling the patients-service
+// import axios from 'axios';
+// const PATIENT_SERVICE_URL = process.env.PATIENT_SERVICE_URL || 'http://localhost:3001/api';
 
 export const createSymptomLog = async (req, res) => {
   try {
     const { patientId, symptomDescription, severity, notes } = req.body;
+
+    // Optional: Verify if the patient exists before logging the symptom
+    // try {
+    //   await axios.get(`${PATIENT_SERVICE_URL}/patients/${patientId}`);
+    // } catch (patientError) {
+    //   if (patientError.response && patientError.response.status === 404) {
+    //     return res.status(404).json({ message: `Paciente con ID ${patientId} no encontrado.` });
+    //   }
+    //   throw patientError; // re-throw other errors
+    // }
 
     const newLog = new SymptomLog({ patientId, symptomDescription, severity, notes });
     await newLog.save();
